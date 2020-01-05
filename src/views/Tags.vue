@@ -1,6 +1,6 @@
 <template>
   <div class="tags">
-    <NtnvArticles :request="path" ref="articles"></NtnvArticles>
+    <NtnvArticles :host="host" :request="path" ref="articles"></NtnvArticles>
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { Route } from "vue-router";
 import { ArticleHeader } from "ntnv-models";
 import { VueLoading } from "vue-loading-template";
 import NtnvArticles from "@/components/NtnvArticles.vue";
+import { ntnvApiHost } from "@/globalConstants";
 
 Component.registerHooks(["beforeRouteUpdate"]);
 
@@ -20,6 +21,10 @@ Component.registerHooks(["beforeRouteUpdate"]);
   }
 })
 export default class Tags extends Vue {
+  get host(): string {
+    return ntnvApiHost;
+  }
+
   get path() {
     return this.$route.fullPath;
   }

@@ -12,6 +12,7 @@
           v-for="articleHeader in articleHeaders"
           :key="articleHeader.id"
           :articleHeader="articleHeader"
+          :host="host"
         ></NtnvArticle>
       </div>
     </transition>
@@ -38,7 +39,7 @@ import NtnvArticle from "./NtnvArticle.vue";
   }
 })
 export default class NtnvArticles extends Vue {
-  @Prop({ default: "http://localhost:58001" })
+  @Prop()
   host!: string;
 
   @Prop({ default: "/" })

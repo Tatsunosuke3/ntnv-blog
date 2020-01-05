@@ -58,7 +58,7 @@ import NtnvNovel from "./NtnvNovel.vue";
 export default class NtnvArticle extends Vue {
   @Prop() private articleHeader!: ArticleHeader;
 
-  @Prop({ default: "http://localhost:58001" })
+  @Prop()
   host!: string;
 
   private article: Article = new Article(
@@ -121,7 +121,6 @@ export default class NtnvArticle extends Vue {
   }
 
   async whenMoreButtonClicked() {
-    console.log("続きを読むがクリックされた。");
     if (!this.isContentLoaded) {
       const res = await fetch(`${this.host}/article/${this.articleHeader.id}`);
       const json = await res.json();

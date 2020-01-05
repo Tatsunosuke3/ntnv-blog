@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <NtnvArticles :request="path" ref="articles"></NtnvArticles>
+    <NtnvArticles :host="host" :request="path" ref="articles"></NtnvArticles>
   </div>
 </template>
 
@@ -11,6 +11,7 @@ import { ArticleHeader } from "ntnv-models";
 import { VueLoading } from "vue-loading-template";
 import NtnvArticle from "@/components/NtnvArticle.vue";
 import NtnvArticles from "@/components/NtnvArticles.vue";
+import { ntnvApiHost } from "@/globalConstants";
 
 Component.registerHooks(["beforeRouteUpdate"]);
 
@@ -22,6 +23,10 @@ Component.registerHooks(["beforeRouteUpdate"]);
   }
 })
 export default class Home extends Vue {
+  get host(): string {
+    return ntnvApiHost;
+  }
+
   get path(): string {
     return this.$route.fullPath;
   }
