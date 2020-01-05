@@ -1,18 +1,35 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <NtnvArticles :request="path" ref="articles"></NtnvArticles>
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import { Vue, Component, Prop } from "vue-property-decorator";
+import { Route } from "vue-router";
+import { ArticleHeader } from "ntnv-models";
+import { VueLoading } from "vue-loading-template";
+import NtnvArticle from "@/components/NtnvArticle.vue";
+import NtnvArticles from "@/components/NtnvArticles.vue";
 
-export default {
-  name: "home",
+Component.registerHooks(["beforeRouteUpdate"]);
+
+@Component({
   components: {
-    HelloWorld
+    VueLoading,
+    NtnvArticle,
+    NtnvArticles
   }
-};
+})
+export default class Home extends Vue {
+  get path(): string {
+    return this.$route.fullPath;
+  }
+
+  private async beforeRouteUpdate(to: Route, from: Route, next: any) {
+    const articles = this.$refs.articles as NtnvArticles;
+    await articles.fetch(to.fullPath);
+    next();
+  }
+}
 </script>
