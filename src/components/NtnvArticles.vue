@@ -12,15 +12,15 @@
           v-for="articleHeader in articleHeaders"
           :key="articleHeader.id"
           :articleHeader="articleHeader"
-          :host="host"
+          :apiPath="apiPath"
         ></NtnvArticle>
       </div>
     </transition>
     <div class="pagination-container">
-      <router-link class="pagination prev first" :to="prevPage" rel="prev">
+      <router-link class="pagination prev first" :to="prevPagePath" rel="prev">
         前のページ
       </router-link>
-      <router-link class="pagination next" :to="nextPage" rel="next">
+      <router-link class="pagination next" :to="nextPagePath" rel="next">
         次のページ
       </router-link>
     </div>
@@ -40,23 +40,23 @@ import NtnvArticle from "./NtnvArticle.vue";
 })
 export default class NtnvArticles extends Vue {
   @Prop()
-  host!: string;
+  apiPath!: string;
 
   @Prop({ default: "/" })
   request!: string;
 
   articleHeaders: ArticleHeader[] = [];
 
-  get requestUrl(): string {
-    return this.host + this.request;
-  }
-
-  public async fetch(request: string) {
-    this.articleHeaders = await this.fetchArticleHeaders(this.host + request);
+  public async update(request: string) {
+    this.articleHeaders = await this.fetchArticleHeaders(
+      this.apiPath + request
+    );
   }
 
   private async created() {
-    this.articleHeaders = await this.fetchArticleHeaders(this.requestUrl);
+    this.articleHeaders = await this.fetchArticleHeaders(
+      this.apiPath + this.request
+    );
   }
 
   private async fetchArticleHeaders(url: string): Promise<ArticleHeader[]> {
@@ -65,9 +65,9 @@ export default class NtnvArticles extends Vue {
     return json as ArticleHeader[];
   }
 
-  get nextPage(): string {
+  get nextPagePath(): string {
     const path = this.$route.path;
-    const queries = this.editQueries(
+    const queries = this.buildQuery(
       this.$route.query.page as string,
       this.$route.query.order as string,
       1
@@ -75,9 +75,9 @@ export default class NtnvArticles extends Vue {
     return `${path}?${queries}`;
   }
 
-  get prevPage(): string {
+  get prevPagePath(): string {
     const path = this.$route.path;
-    const queries = this.editQueries(
+    const queries = this.buildQuery(
       this.$route.query.page as string,
       this.$route.query.order as string,
       -1
@@ -85,7 +85,7 @@ export default class NtnvArticles extends Vue {
     return `${path}?${queries}`;
   }
 
-  private editQueries(page: string, order: string, increment: number): string {
+  private buildQuery(page: string, order: string, increment: number): string {
     const queries: string[] = [];
 
     let p: string;

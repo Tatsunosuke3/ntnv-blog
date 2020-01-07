@@ -1,1 +1,1 @@
-export const ntnvApiHost: string = "http://localhost:58001";
+export const ntnvApiPath: string = "http://ntnv-api.tatsunosuke3.com";

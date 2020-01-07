@@ -59,7 +59,7 @@ export default class NtnvArticle extends Vue {
   @Prop() private articleHeader!: ArticleHeader;
 
   @Prop()
-  host!: string;
+  apiPath!: string;
 
   private article: Article = new Article(
     0,
@@ -122,7 +122,9 @@ export default class NtnvArticle extends Vue {
 
   async whenMoreButtonClicked() {
     if (!this.isContentLoaded) {
-      const res = await fetch(`${this.host}/article/${this.articleHeader.id}`);
+      const res = await fetch(
+        `${this.apiPath}/article/${this.articleHeader.id}`
+      );
       const json = await res.json();
       this.article = json as Article;
       this.isContentLoaded = true;
